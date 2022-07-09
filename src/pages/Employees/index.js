@@ -1,19 +1,35 @@
 import React from "react";
 
 import { Column, Row, Image, Text, Stack, List, Button } from "components";
-import { getEmployees } from "service/api";
+import { postEmployeeList, getEmployees } from "service/api";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
 
 const EmployeesPage = () => {
-  const [apiData, setapiData] = React.useState();
+  const [apiData1, setapiData1] = React.useState();
+  const [apiData2, setapiData2] = React.useState();
   React.useEffect(() => {
-    callApi();
+    callApi2();
   }, []);
 
-  function callApi() {
+  function callApi1() {
+    const req = {};
+    postEmployeeList(req)
+      .then((res) => {
+        setapiData1(res);
+
+        toast.success("INSERTED SUCCESSFULLY");
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error("NOT INSERTED");
+      });
+  }
+  function callApi2() {
     const req = {};
     getEmployees(req)
       .then((res) => {
-        setapiData(res);
+        setapiData2(res);
       })
       .catch((err) => {
         console.error(err);
@@ -22,7 +38,7 @@ const EmployeesPage = () => {
 
   return (
     <>
-      <Column className="bg-bluegray_50 font-sourcesanspro items-center justify-start mx-[auto] lg:pb-[244px] xl:pb-[279px] pb-[314px] 3xl:pb-[377px] 3xl:pl-[10px] lg:pl-[7px] xl:pl-[8px] pl-[9px] pr-[1px] w-[100%]">
+      <Column className="bg-bluegray_50 font-sourcesanspro items-center justify-start mx-[auto] lg:pb-[15px] xl:pb-[17px] pb-[20px] 3xl:pb-[24px] 3xl:pl-[10px] lg:pl-[7px] xl:pl-[8px] pl-[9px] pr-[1px] w-[100%]">
         <header className="w-[100%]">
           <Row className="bg-white_A700 border border-indigo_50 border-solid items-center justify-start lg:pl-[13px] xl:pl-[15px] pl-[17px] 3xl:pl-[20px] lg:py-[12px] xl:py-[14px] py-[16px] 3xl:py-[19px] w-[100%]">
             <Row className="border border-bluegray_200 border-solid items-center justify-center lg:pb-[6px] xl:pb-[7px] pb-[8px] 3xl:pb-[9px] pl-[10px] 3xl:pl-[12px] lg:pl-[7px] xl:pl-[8px] lg:pr-[19px] xl:pr-[22px] pr-[25px] 3xl:pr-[30px] 3xl:pt-[10px] lg:pt-[7px] xl:pt-[8px] pt-[9px] rounded-bl-[4px] rounded-br-[0] rounded-tl-[4px] rounded-tr-[0] w-[11%]">
@@ -80,7 +96,7 @@ const EmployeesPage = () => {
             </Stack>
           </Row>
         </header>
-        <Column className="font-inter items-center justify-start lg:mt-[11px] xl:mt-[13px] mt-[15px] 3xl:mt-[18px] outline outline-[1px] outline-gray_201 lg:pb-[176px] xl:pb-[201px] pb-[227px] 3xl:pb-[272px] w-[100%]">
+        <Column className="font-inter items-start justify-start lg:mt-[11px] xl:mt-[13px] mt-[15px] 3xl:mt-[18px] outline outline-[1px] outline-gray_201 lg:pb-[15px] xl:pb-[17px] pb-[20px] 3xl:pb-[24px] w-[100%]">
           <Column className="bg-white_A700 border-bw05 border-gray_201 border-solid items-start justify-start w-[100%]">
             <Row className="items-center justify-evenly w-[100%]">
               <Image
@@ -125,48 +141,294 @@ const EmployeesPage = () => {
               className="gap-[0] min-h-[auto] w-[100%]"
               orientation="vertical"
             >
-              {apiData?.map((apiDataEle) => {
-                return (
-                  <Row className="items-center justify-evenly my-[0] w-[100%]">
-                    <Image
-                      src={"images/img_content.png"}
-                      className="lg:h-[35px] xl:h-[40px] h-[44px] 2xl:h-[45px] 3xl:h-[53px] object-contain w-[5%]"
-                      alt="Content"
-                    />
-                    <Column className="bg-white_A700 border-bw05 border-gray_201 border-solid items-center lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] w-[16%]">
-                      <Text className="font-normal not-italic lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 tracking-ls1 w-[auto]">
-                        {apiDataEle?.first_name}
-                      </Text>
-                    </Column>
-                    <Text className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal lg:leading-[17px] xl:leading-[19px] leading-[22.00px] 2xl:leading-[22px] 3xl:leading-[26px] not-italic lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-left tracking-ls1 w-[16%]">
-                      {apiDataEle?.designation}
-                    </Text>
-                    <Column className="bg-white_A700 border-bw05 border-gray_201 border-solid items-center lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] w-[16%]">
-                      <Text className="bg-deep_orange_50 border-bw05 border-red_700 border-solid font-normal lg:px-[6px] xl:px-[7px] px-[8px] 3xl:px-[9px] rounded-radius4 text-[11px] 3xl:text-[13px] lg:text-[8px] xl:text-[9px] text-red_700 tracking-ls1 w-[auto]">
-                        {apiDataEle?.status}
-                      </Text>
-                    </Column>
-                    <Text className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal lg:leading-[17px] xl:leading-[19px] leading-[22.00px] 2xl:leading-[22px] 3xl:leading-[26px] not-italic lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-left tracking-ls1 w-[16%]">
-                      2400
-                    </Text>
-                    <Text className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal lg:leading-[17px] xl:leading-[19px] leading-[22.00px] 2xl:leading-[22px] 3xl:leading-[26px] not-italic lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-left tracking-ls1 w-[16%]">
-                      {apiDataEle?.joining_date}
-                    </Text>
-                    <Row className="bg-white_A700 border-bw05 border-gray_201 border-solid items-center justify-center lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] xl:pr-[110px] pr-[124px] 3xl:pr-[148px] lg:pr-[96px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] w-[16%]">
-                      <Text className="font-normal not-italic lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-light_blue_A700 tracking-ls1 w-[auto]">
-                        Edit
-                      </Text>
-                      <Text className="font-normal ml-[10px] 3xl:ml-[12px] lg:ml-[7px] xl:ml-[8px] not-italic lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-light_blue_A700 tracking-ls1 w-[auto]">
-                        Details
-                      </Text>
-                    </Row>
-                  </Row>
-                );
-              })}
+              <Row className="items-center justify-evenly my-[0] w-[100%]">
+                <Image
+                  src={"images/img_content.png"}
+                  className="lg:h-[35px] xl:h-[40px] h-[44px] 2xl:h-[45px] 3xl:h-[53px] object-contain w-[5%]"
+                  alt="Content"
+                />
+                <Column className="bg-white_A700 border-bw05 border-gray_201 border-solid items-center lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] w-[16%]">
+                  <Text className="font-normal not-italic lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 tracking-ls1 w-[auto]">
+                    {apiData2?.response?.first_name}
+                  </Text>
+                </Column>
+                <Text className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal lg:leading-[17px] xl:leading-[19px] leading-[22.00px] 2xl:leading-[22px] 3xl:leading-[26px] not-italic lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-left tracking-ls1 w-[16%]">
+                  {apiData2?.response?.designation}
+                </Text>
+                <Column className="bg-white_A700 border-bw05 border-gray_201 border-solid items-center lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] w-[16%]">
+                  <Text className="bg-deep_orange_50 border-bw05 border-red_700 border-solid font-normal lg:px-[6px] xl:px-[7px] px-[8px] 3xl:px-[9px] rounded-radius4 text-[11px] 3xl:text-[13px] lg:text-[8px] xl:text-[9px] text-red_700 tracking-ls1 w-[auto]">
+                    {apiData2?.response?.status}
+                  </Text>
+                </Column>
+                <Text className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal lg:leading-[17px] xl:leading-[19px] leading-[22.00px] 2xl:leading-[22px] 3xl:leading-[26px] not-italic lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-left tracking-ls1 w-[16%]">
+                  2400
+                </Text>
+                <Text className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal lg:leading-[17px] xl:leading-[19px] leading-[22.00px] 2xl:leading-[22px] 3xl:leading-[26px] not-italic lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-left tracking-ls1 w-[16%]">
+                  {apiData2?.response?.joining_date}
+                </Text>
+                <Row className="bg-white_A700 border-bw05 border-gray_201 border-solid items-center justify-center lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] xl:pr-[110px] pr-[124px] 3xl:pr-[148px] lg:pr-[96px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] w-[16%]">
+                  <Text className="font-normal not-italic lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-light_blue_A700 tracking-ls1 w-[auto]">
+                    Edit
+                  </Text>
+                  <Text className="font-normal ml-[10px] 3xl:ml-[12px] lg:ml-[7px] xl:ml-[8px] not-italic lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-light_blue_A700 tracking-ls1 w-[auto]">
+                    Details
+                  </Text>
+                </Row>
+              </Row>
+              <Row className="items-center justify-evenly my-[0] w-[100%]">
+                <Image
+                  src={"images/img_content_1.png"}
+                  className="lg:h-[35px] xl:h-[40px] h-[44px] 2xl:h-[45px] 3xl:h-[53px] object-contain w-[5%]"
+                  alt="Content"
+                />
+                <Column className="bg-white_A700 border-bw05 border-gray_201 border-solid items-center lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] w-[16%]">
+                  <Text className="font-normal not-italic lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 tracking-ls1 w-[auto]">
+                    Prototype
+                  </Text>
+                </Column>
+                <Text className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal lg:leading-[17px] xl:leading-[19px] leading-[22.00px] 2xl:leading-[22px] 3xl:leading-[26px] not-italic lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-left tracking-ls1 w-[16%]">
+                  Pulvinar eu facilisis turpis imperdiet sed.
+                </Text>
+                <Column className="bg-white_A700 border-bw05 border-gray_201 border-solid items-center lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] w-[16%]">
+                  <Text className="bg-orange_50 border-bw05 border-orange_800 border-solid font-normal lg:px-[6px] xl:px-[7px] px-[8px] 3xl:px-[9px] rounded-radius4 text-[11px] 3xl:text-[13px] lg:text-[8px] xl:text-[9px] text-orange_800 tracking-ls1 w-[auto]">
+                    Pending
+                  </Text>
+                </Column>
+                <Text className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal lg:leading-[17px] xl:leading-[19px] leading-[22.00px] 2xl:leading-[22px] 3xl:leading-[26px] not-italic lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-left tracking-ls1 w-[16%]">
+                  1000
+                </Text>
+                <Text className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal lg:leading-[17px] xl:leading-[19px] leading-[22.00px] 2xl:leading-[22px] 3xl:leading-[26px] not-italic lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-left tracking-ls1 w-[16%]">
+                  2022-06-29
+                </Text>
+                <Row className="bg-white_A700 border-bw05 border-gray_201 border-solid items-center justify-center lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] xl:pr-[110px] pr-[124px] 3xl:pr-[148px] lg:pr-[96px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] w-[16%]">
+                  <Text className="font-normal not-italic lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-light_blue_A700 tracking-ls1 w-[auto]">
+                    Edit
+                  </Text>
+                  <Text className="font-normal ml-[10px] 3xl:ml-[12px] lg:ml-[7px] xl:ml-[8px] not-italic lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-light_blue_A700 tracking-ls1 w-[auto]">
+                    Details
+                  </Text>
+                </Row>
+              </Row>
+              <Row className="items-center justify-evenly my-[0] w-[100%]">
+                <Image
+                  src={"images/img_content_2.png"}
+                  className="lg:h-[35px] xl:h-[40px] h-[44px] 2xl:h-[45px] 3xl:h-[53px] object-contain w-[5%]"
+                  alt="Content"
+                />
+                <Column className="bg-white_A700 border-bw05 border-gray_201 border-solid items-center lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] w-[16%]">
+                  <Text className="font-normal not-italic lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 tracking-ls1 w-[auto]">
+                    Inspect
+                  </Text>
+                </Column>
+                <Button className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal not-italic py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-center tracking-ls1 w-[16%]">
+                  consectetur adipiscing elit,
+                </Button>
+                <Column className="bg-white_A700 border-bw05 border-gray_201 border-solid items-center lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] w-[16%]">
+                  <Text className="bg-light_green_50 border-bw05 border-light_green_A700 border-solid font-normal lg:px-[6px] xl:px-[7px] px-[8px] 3xl:px-[9px] rounded-radius4 text-[11px] 3xl:text-[13px] lg:text-[8px] xl:text-[9px] text-light_green_A700 tracking-ls1 w-[auto]">
+                    Approve
+                  </Text>
+                </Column>
+                <Text className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal lg:leading-[17px] xl:leading-[19px] leading-[22.00px] 2xl:leading-[22px] 3xl:leading-[26px] not-italic lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-left tracking-ls1 w-[16%]">
+                  0900
+                </Text>
+                <Text className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal lg:leading-[17px] xl:leading-[19px] leading-[22.00px] 2xl:leading-[22px] 3xl:leading-[26px] not-italic lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-left tracking-ls1 w-[16%]">
+                  2022-04-23
+                </Text>
+                <Row className="bg-white_A700 border-bw05 border-gray_201 border-solid items-center justify-center lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] xl:pr-[110px] pr-[124px] 3xl:pr-[148px] lg:pr-[96px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] w-[16%]">
+                  <Text className="font-normal not-italic lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-light_blue_A700 tracking-ls1 w-[auto]">
+                    Edit
+                  </Text>
+                  <Text className="font-normal ml-[10px] 3xl:ml-[12px] lg:ml-[7px] xl:ml-[8px] not-italic lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-light_blue_A700 tracking-ls1 w-[auto]">
+                    Details
+                  </Text>
+                </Row>
+              </Row>
+              <Row className="items-center justify-evenly my-[0] w-[100%]">
+                <Image
+                  src={"images/img_content_3.png"}
+                  className="lg:h-[35px] xl:h-[40px] h-[44px] 2xl:h-[45px] 3xl:h-[53px] object-contain w-[5%]"
+                  alt="Content"
+                />
+                <Column className="bg-white_A700 border-bw05 border-gray_201 border-solid items-center lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] w-[16%]">
+                  <Text className="font-normal not-italic lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 tracking-ls1 w-[auto]">
+                    Content
+                  </Text>
+                </Column>
+                <Text className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal lg:leading-[17px] xl:leading-[19px] leading-[22.00px] 2xl:leading-[22px] 3xl:leading-[26px] not-italic lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-left tracking-ls1 w-[16%]">
+                  sed do eiusmod tempor incididunt
+                </Text>
+                <Column className="bg-white_A700 border-bw05 border-gray_201 border-solid items-center lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] w-[16%]">
+                  <Text className="bg-blue_50 border-bw05 border-light_blue_A700 border-solid font-normal lg:px-[6px] xl:px-[7px] px-[8px] 3xl:px-[9px] rounded-radius4 text-[11px] 3xl:text-[13px] lg:text-[8px] xl:text-[9px] text-light_blue_A700 tracking-ls1 w-[auto]">
+                    Booked
+                  </Text>
+                </Column>
+                <Text className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal lg:leading-[17px] xl:leading-[19px] leading-[22.00px] 2xl:leading-[22px] 3xl:leading-[26px] not-italic lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-left tracking-ls1 w-[16%]">
+                  2100
+                </Text>
+                <Text className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal lg:leading-[17px] xl:leading-[19px] leading-[22.00px] 2xl:leading-[22px] 3xl:leading-[26px] not-italic lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-left tracking-ls1 w-[16%]">
+                  2022-02-22
+                </Text>
+                <Row className="bg-white_A700 border-bw05 border-gray_201 border-solid items-center justify-center lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] xl:pr-[110px] pr-[124px] 3xl:pr-[148px] lg:pr-[96px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] w-[16%]">
+                  <Text className="font-normal not-italic lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-light_blue_A700 tracking-ls1 w-[auto]">
+                    Edit
+                  </Text>
+                  <Text className="font-normal ml-[10px] 3xl:ml-[12px] lg:ml-[7px] xl:ml-[8px] not-italic lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-light_blue_A700 tracking-ls1 w-[auto]">
+                    Details
+                  </Text>
+                </Row>
+              </Row>
+              <Row className="items-center justify-evenly my-[0] w-[100%]">
+                <Image
+                  src={"images/img_content_4.png"}
+                  className="lg:h-[35px] xl:h-[40px] h-[44px] 2xl:h-[45px] 3xl:h-[53px] object-contain w-[5%]"
+                  alt="Content"
+                />
+                <Column className="bg-white_A700 border-bw05 border-gray_201 border-solid items-center lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] w-[16%]">
+                  <Text className="font-normal not-italic lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 tracking-ls1 w-[auto]">
+                    Effects
+                  </Text>
+                </Column>
+                <Text className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal lg:leading-[17px] xl:leading-[19px] leading-[22.00px] 2xl:leading-[22px] 3xl:leading-[26px] not-italic lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-left tracking-ls1 w-[16%]">
+                  quis nostrud exercitation ullamco laboris
+                </Text>
+                <Column className="bg-white_A700 border-bw05 border-gray_201 border-solid items-center lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] w-[16%]">
+                  <Text className="bg-deep_orange_50 border-bw05 border-red_700 border-solid font-normal lg:px-[6px] xl:px-[7px] px-[8px] 3xl:px-[9px] rounded-radius4 text-[11px] 3xl:text-[13px] lg:text-[8px] xl:text-[9px] text-red_700 tracking-ls1 w-[auto]">
+                    Cancelled
+                  </Text>
+                </Column>
+                <Text className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal lg:leading-[17px] xl:leading-[19px] leading-[22.00px] 2xl:leading-[22px] 3xl:leading-[26px] not-italic lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-left tracking-ls1 w-[16%]">
+                  0300
+                </Text>
+                <Text className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal lg:leading-[17px] xl:leading-[19px] leading-[22.00px] 2xl:leading-[22px] 3xl:leading-[26px] not-italic lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-left tracking-ls1 w-[16%]">
+                  2022-02-04
+                </Text>
+                <Row className="bg-white_A700 border-bw05 border-gray_201 border-solid items-center justify-center lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] xl:pr-[110px] pr-[124px] 3xl:pr-[148px] lg:pr-[96px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] w-[16%]">
+                  <Text className="font-normal not-italic lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-light_blue_A700 tracking-ls1 w-[auto]">
+                    Edit
+                  </Text>
+                  <Text className="font-normal ml-[10px] 3xl:ml-[12px] lg:ml-[7px] xl:ml-[8px] not-italic lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-light_blue_A700 tracking-ls1 w-[auto]">
+                    Details
+                  </Text>
+                </Row>
+              </Row>
+              <Row className="items-center justify-evenly my-[0] w-[100%]">
+                <Image
+                  src={"images/img_content_5.png"}
+                  className="lg:h-[35px] xl:h-[40px] h-[44px] 2xl:h-[45px] 3xl:h-[53px] object-contain w-[5%]"
+                  alt="Content"
+                />
+                <Column className="bg-white_A700 border-bw05 border-gray_201 border-solid items-center lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] w-[16%]">
+                  <Text className="font-normal not-italic lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 tracking-ls1 w-[auto]">
+                    Export
+                  </Text>
+                </Column>
+                <Text className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal lg:leading-[17px] xl:leading-[19px] leading-[22.00px] 2xl:leading-[22px] 3xl:leading-[26px] not-italic lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-left tracking-ls1 w-[16%]">
+                  sunt in culpa qui officia
+                </Text>
+                <Column className="bg-white_A700 border-bw05 border-gray_201 border-solid items-center lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] w-[16%]">
+                  <Text className="bg-orange_50 border-bw05 border-orange_800 border-solid font-normal lg:px-[6px] xl:px-[7px] px-[8px] 3xl:px-[9px] rounded-radius4 text-[11px] 3xl:text-[13px] lg:text-[8px] xl:text-[9px] text-orange_800 tracking-ls1 w-[auto]">
+                    Pending
+                  </Text>
+                </Column>
+                <Text className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal lg:leading-[17px] xl:leading-[19px] leading-[22.00px] 2xl:leading-[22px] 3xl:leading-[26px] not-italic lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-left tracking-ls1 w-[16%]">
+                  1100
+                </Text>
+                <Text className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal lg:leading-[17px] xl:leading-[19px] leading-[22.00px] 2xl:leading-[22px] 3xl:leading-[26px] not-italic lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-left tracking-ls1 w-[16%]">
+                  2022-03-22
+                </Text>
+                <Row className="bg-white_A700 border-bw05 border-gray_201 border-solid items-center justify-center lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] xl:pr-[110px] pr-[124px] 3xl:pr-[148px] lg:pr-[96px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] w-[16%]">
+                  <Text className="font-normal not-italic lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-light_blue_A700 tracking-ls1 w-[auto]">
+                    Edit
+                  </Text>
+                  <Text className="font-normal ml-[10px] 3xl:ml-[12px] lg:ml-[7px] xl:ml-[8px] not-italic lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-light_blue_A700 tracking-ls1 w-[auto]">
+                    Details
+                  </Text>
+                </Row>
+              </Row>
+              <Row className="items-center justify-evenly my-[0] w-[100%]">
+                <Image
+                  src={"images/img_content_6.png"}
+                  className="lg:h-[35px] xl:h-[40px] h-[44px] 2xl:h-[45px] 3xl:h-[53px] object-contain w-[5%]"
+                  alt="Content"
+                />
+                <Column className="bg-white_A700 border-bw05 border-gray_201 border-solid items-center lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] w-[16%]">
+                  <Text className="font-normal not-italic lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 tracking-ls1 w-[auto]">
+                    Auto layout
+                  </Text>
+                </Column>
+                <Text className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal lg:leading-[17px] xl:leading-[19px] leading-[22.00px] 2xl:leading-[22px] 3xl:leading-[26px] not-italic lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-left tracking-ls1 w-[16%]">
+                  Ut enim ad minim veniam
+                </Text>
+                <Column className="bg-white_A700 border-bw05 border-gray_201 border-solid items-center lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] w-[16%]">
+                  <Text className="bg-light_green_50 border-bw05 border-light_green_A700 border-solid font-normal lg:px-[6px] xl:px-[7px] px-[8px] 3xl:px-[9px] rounded-radius4 text-[11px] 3xl:text-[13px] lg:text-[8px] xl:text-[9px] text-light_green_A700 tracking-ls1 w-[auto]">
+                    Approve
+                  </Text>
+                </Column>
+                <Text className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal lg:leading-[17px] xl:leading-[19px] leading-[22.00px] 2xl:leading-[22px] 3xl:leading-[26px] not-italic lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-left tracking-ls1 w-[16%]">
+                  1800
+                </Text>
+                <Text className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal lg:leading-[17px] xl:leading-[19px] leading-[22.00px] 2xl:leading-[22px] 3xl:leading-[26px] not-italic lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-left tracking-ls1 w-[16%]">
+                  2022-02-13
+                </Text>
+                <Row className="bg-white_A700 border-bw05 border-gray_201 border-solid items-center justify-center lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] xl:pr-[110px] pr-[124px] 3xl:pr-[148px] lg:pr-[96px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] w-[16%]">
+                  <Text className="font-normal not-italic lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-light_blue_A700 tracking-ls1 w-[auto]">
+                    Edit
+                  </Text>
+                  <Text className="font-normal ml-[10px] 3xl:ml-[12px] lg:ml-[7px] xl:ml-[8px] not-italic lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-light_blue_A700 tracking-ls1 w-[auto]">
+                    Details
+                  </Text>
+                </Row>
+              </Row>
+              <Row className="items-center justify-evenly my-[0] w-[100%]">
+                <Image
+                  src={"images/img_content_7.png"}
+                  className="lg:h-[35px] xl:h-[40px] h-[44px] 2xl:h-[45px] 3xl:h-[53px] object-contain w-[5%]"
+                  alt="Content"
+                />
+                <Text className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal lg:leading-[17px] xl:leading-[19px] leading-[22.00px] 2xl:leading-[22px] 3xl:leading-[26px] not-italic lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-left tracking-ls1 w-[16%]">
+                  Text
+                </Text>
+                <Text className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal lg:leading-[17px] xl:leading-[19px] leading-[22.00px] 2xl:leading-[22px] 3xl:leading-[26px] not-italic lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-left tracking-ls1 w-[16%]">
+                  Excepteur sint occaecat cupidatat non
+                </Text>
+                <Column className="bg-white_A700 border-bw05 border-gray_201 border-solid items-center lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] w-[16%]">
+                  <Text className="bg-blue_50 border-bw05 border-light_blue_A700 border-solid font-normal lg:px-[6px] xl:px-[7px] px-[8px] 3xl:px-[9px] rounded-radius4 text-[11px] 3xl:text-[13px] lg:text-[8px] xl:text-[9px] text-light_blue_A700 tracking-ls1 w-[auto]">
+                    Booked
+                  </Text>
+                </Column>
+                <Text className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal lg:leading-[17px] xl:leading-[19px] leading-[22.00px] 2xl:leading-[22px] 3xl:leading-[26px] not-italic lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-left tracking-ls1 w-[16%]">
+                  0400
+                </Text>
+                <Text className="bg-white_A700 border-bw05 border-gray_201 border-solid font-normal lg:leading-[17px] xl:leading-[19px] leading-[22.00px] 2xl:leading-[22px] 3xl:leading-[26px] not-italic lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-bluegray_901 text-left tracking-ls1 w-[16%]">
+                  2022-01-16
+                </Text>
+                <Row className="bg-white_A700 border-bw05 border-gray_201 border-solid items-center justify-center lg:pl-[17px] xl:pl-[19px] pl-[22px] 3xl:pl-[26px] xl:pr-[110px] pr-[124px] 3xl:pr-[148px] lg:pr-[96px] py-[11px] 3xl:py-[13px] lg:py-[8px] xl:py-[9px] w-[16%]">
+                  <Text className="font-normal not-italic lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-light_blue_A700 tracking-ls1 w-[auto]">
+                    Edit
+                  </Text>
+                  <Text className="font-normal ml-[10px] 3xl:ml-[12px] lg:ml-[7px] xl:ml-[8px] not-italic lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-light_blue_A700 tracking-ls1 w-[auto]">
+                    Details
+                  </Text>
+                </Row>
+              </Row>
             </List>
+          </Column>
+          <Column className="font-sourcesanspro items-center lg:mt-[105px] xl:mt-[120px] mt-[136px] 3xl:mt-[163px] lg:pl-[20px] xl:pl-[23px] pl-[26px] 3xl:pl-[31px] lg:pr-[48px] xl:pr-[55px] pr-[62px] 3xl:pr-[74px] w-[100%]">
+            <Column className="bg-gray_100 border border-indigo_50 border-solid items-center justify-start lg:pb-[6px] xl:pb-[7px] pb-[8px] 3xl:pb-[9px] lg:pl-[450px] xl:pl-[515px] pl-[579px] 3xl:pl-[695px] 3xl:pt-[10px] lg:pt-[7px] xl:pt-[8px] pt-[9px] w-[100%]">
+              <Button
+                className="common-pointer bg-bluegray_900 border border-gray_202 border-solid font-normal not-italic lg:py-[5px] xl:py-[6px] py-[7px] 3xl:py-[8px] rounded-radius4 lg:text-[10px] xl:text-[12px] text-[14px] 3xl:text-[16px] text-center text-white_A700 w-[16%]"
+                onClick={() => {
+                  callApi1();
+                }}
+              >
+                Sync All Employee
+              </Button>
+            </Column>
           </Column>
         </Column>
       </Column>
+
+      <ToastContainer />
     </>
   );
 };
